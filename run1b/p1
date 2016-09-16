@@ -1,0 +1,19 @@
+#!/bin/sh -
+
+set -e
+
+c=0
+[ -f run.txt ] || touch run.txt
+
+while :
+do 
+    time ../crunchfuck-1k < run.txt > run.tmp || exit
+
+    awk '{
+	if ($0 in lines) next;
+	lines[$0] = 1;
+	print
+    }' run.txt run.tmp > run.new || exit
+
+    mv run.new run.txt
+done
